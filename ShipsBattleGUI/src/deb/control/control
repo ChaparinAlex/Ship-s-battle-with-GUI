@@ -1,0 +1,8 @@
+Package: ShipsBattleGUI
+Version: [[version]]
+Section: games
+Priority: optional
+Architecture: all
+Maintainer: Oleksandr Chaparin
+Description: [[GUI game]]
+Distribution: development

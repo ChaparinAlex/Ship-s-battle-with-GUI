@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ShipsBattleGUI</groupId>
+  <artifactId>ShipsBattleGUI</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <organization>
+    <name>Oleksandr Chaparin</name>
+  </organization>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+         <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+       </plugin> 
+       
+       <plugin>
+        <groupId>com.zenjava</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>8.7.0</version>   
+        <configuration>
+          <mainClass>com.chaparin.Main</mainClass>
+          <nativeInstallers />
+        </configuration>    
+       </plugin>
+       
+        <plugin>
+                <artifactId>jdeb</artifactId>
+                <groupId>org.vafer</groupId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jdeb</goal>
+                        </goals>
+                        <configuration>
+                         <controlDir>${basedir}/src/deb/control</controlDir>
+                         
+                         <verbose>true</verbose>
+                            <snapshotExpand>true</snapshotExpand>
+                            <!-- expand "SNAPSHOT" to what is in the "USER" env variable -->
+                            <snapshotEnv>USER</snapshotEnv>
+                            <verbose>true</verbose>
+                           
+                            <dataSet>
+
+                                <data>
+                                  <src>${project.build.directory}/${project.build.finalName}.jar</src>
+                                  <type>file</type>
+                                  <mapper>
+                                    <type>perm</type>
+                                    <prefix>/usr/share/jdeb/lib</prefix>
+                                    <user>loader</user>
+                                    <group>loader</group>
+                                  </mapper>
+                                </data>
+
+                                <data>
+                                  <type>link</type>
+                                  <symlink>true</symlink>
+                                  <linkName>/usr/share/java/jdeb.jar</linkName>
+                                  <linkTarget>/usr/share/jdeb/lib/${project.build.finalName}.jar</linkTarget>
+                                </data>
+
+                                <data>
+                                  <src>${basedir}/src/deb/init.d</src>
+                                  <type>directory</type>
+                                  <mapper>
+                                    <type>perm</type>
+                                    <prefix>/etc/init.d</prefix>
+                                    <user>loader</user>
+                                    <group>loader</group>
+                                  </mapper>
+                                </data>
+
+                                <data>
+                                  <type>template</type>
+                                  <paths>
+                                    <path>etc/${project.artifactId}</path>
+                                    <path>var/lib/${project.artifactId}</path>
+                                    <path>var/log/${project.artifactId}</path>
+                                    <path>var/run/${project.artifactId}</path>
+                                  </paths>
+                                  <mapper>
+                                    <type>perm</type>
+                                    <user>loader</user>
+                                    <group>loader</group>
+                                  </mapper>
+                                </data>
+
+                            </dataSet>
+                        </configuration>
+                    </execution>
+                </executions>
+                
+                
+       </plugin>
+      
+    </plugins>
+  </build>
+</project>
